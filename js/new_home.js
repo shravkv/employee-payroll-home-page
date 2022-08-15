@@ -1,14 +1,19 @@
+let employeePayrollList;
 window.addEventListener('DOMContentLoaded', (event) => {
+    employeePayrollList = getEmployeePayrollDataFromStorage();
     createInnerHtml();
-}); 
+    // localStorage.removeItem('employeePayrollList');
+});
 
-//template literal ES6 feature
-
+const getEmployeePayrollDataFromStorage = () => {
+    return localStorage.getItem('employeePayrollList') ?
+        JSON.parse(localStorage.getItem('employeePayrollList')) : [];
+}
 const createInnerHtml = () => {
-    const headerHtml = "<th></th><th>Name</th><th>Gender</th><th>Department</th><th>Salary</th><th>Start Date</th><th>Actions</th>";
-    let empPayrollList = createEmployeePayrollDataJSON()[0];
+    const headerHtml = "<th></th><th>Nane</th><th>Gender</th><th>Department</th><th>Salary</th><th>Start Date</th><th>Actions</th>";
+    if (employeePayrollList.length == 0) return;
     let innerHtml = `${headerHtml}`;
-    for (const empPayrollData of empPayrollList) {
+    for (let index = 0; index < employeePayrollList.length; index++) {
 
         innerHtml = `${innerHtml}
             <tr>
@@ -26,46 +31,14 @@ const createInnerHtml = () => {
         `;
     }
     document.querySelector('#table-display').innerHTML = innerHtml;
-}  
-
+    document.querySelector(".emp-count").textContent = employeePayrollList.length;
+}
 const getDeptHtml = (deptList) => {
     let deptHtml = '';
-    
+
     for (const dept of deptList) {
         deptHtml = `${deptHtml} <div class="dept-label">${dept}</div>`
     }
 
     return deptHtml;
-}
-
-const createEmployeePayrollDataJSON = () => {
-    let empPayrollListLocal = [
-        {
-            _name: 'Narayan Mahadevan',
-            _gender: 'male',
-            _department: [
-                         'Engineering',
-                         'Finance'
-            ],
-            _salary: '500000',
-            _startDate: '29 Oct 2019',
-            _note: '',
-            _id: new Date().getTime(),
-            _profilePic: '../assets/profile-images/Ellipse -2.png'
-        },
-        {
-            _name: 'Sravan Kumari',
-            _gender: 'female',
-            _department: [
-                         'Sales'
-            ],
-            _salary: '400000',
-            _startDate: '29 Oct 2019',
-            _note: '',
-            _id: new Date().getTime(),
-            _profilePic: '../assets/profile-images/Ellipse -1.png'
-        },
-
-    ];
-    return empPayrollListLocal;
 }
